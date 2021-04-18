@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <div id="header">
+            <div class="logo">
+                <p>Remind Auto</p>
+            </div>
+            <div class="text-heading">
+                
+            </div>
+        </div>
+
+        <div id="main">
+            <div id="sidebar">
+                <div class="signin" id="signin">
+                    <p class="title">Đăng Nhập</p>
+                    <form action="/signin" method="POST">
+                        <input type="text" name="username" placeholder="UserName" id="un" class="text-box">
+                        <input type="password" name="password" id="pass" placeholder="Password" class="text-box">
+                        <button type="submit" class="button">Đăng nhập</button>
+                    </form>
+                    <button type="submit" class="button" id="view-signup">Đăng kí</button>
+                </div>
+
+                <div class="signup hide" id="signup">
+                  <p class="title">Đăng Kí</p>
+                  <form action="/signup" method="POST">
+                    <input type="text" class="text-box" name="username" id="un">
+                    <input type="password" class="text-box" name="password" id="pass">
+                    <input type="email" class="text-box" name="email" id="email">
+                    <button type="submit" class="button">Đăng kí</button>
+                </form>    
+                <button type="submit" class="button" id="view-signin">Đăng nhập</button>
+                </div>
+
+                <div class="charge-money">
+                    <p class="title">Nạp tiền</p>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Logo_MB_new.png" alt="" class="bank">
+                    <div class="text-content">
+                        <p>Số tài khoản : </p> <p class="active">9704229216586789</p>
+                    </div>
+                    
+                    <div class="text-content">
+                        <p>Người nhận : </p> <p class="active">Đỗ Văn Sơn</p>
+                    </div>
+                    <div class="text-content">
+                        <p>Nội dung : </p> <p class="active">Tên tài khoản</p>
+                    </div>
+                    
+
+                </div>
+            </div>
+
+            <div id="content">
+                <div class="system">
+                    <p class="title">Thống kê</p>
+                    <div class="text-content">
+                        <p>Hệ thống hiện tại có </p> <p class="active">473 </p> <p>người hoạt động.</p>
+                    </div>
+    
+                    <div class="text-content">
+                        <p>Đã tương tác tổng cộng</p> <p class="active">370.000+ </p> <p>lần.</p>
+                    </div>
+    
+                    <div class="text-content">
+                        <p class="active">3.562 </p> <p>người đã từng sử dụng hệ thống.</p>
+                    </div>
+                </div>
+                <div class="notication">
+                    <p class="title">Thông báo</p>
+                    <div class="text-content">
+                        <p>Tham gia nhóm zalo</p> <p class="active"> Tại đây </p> 
+                    </div>
+    
+                    <div class="text-content">
+                        <p>Fanpage hỗ trợ khi gặp lỗi</p> <p class="active"> Tại đây </p> 
+                    </div>
+                    
+                    <div class="text-content">
+                        <p>Hệ thống đã hoạt động bình thường</p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+      const signUpButton = document.getElementById('view-signup');
+      const signInButton = document.getElementById('view-signin');
+      const signin = document.getElementById('signin');
+      const signup = document.getElementById('signup');
+
+      signUpButton.addEventListener('click', () => {
+        signin.classList.add("hide");
+        signup.classList.remove("hide");
+      });
+      
+      signInButton.addEventListener('click', () => {
+        signin.classList.remove("hide");
+        signup.classList.add("hide");
+      });
+      </script>
+
+</body>
+
+</html>

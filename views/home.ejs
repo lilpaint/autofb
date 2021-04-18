@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/ejs@3.1.3/ejs.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="/javascripts/modal.js"></script>
+    
+</head>
+<body>
+    
+    <div id="app">
+        <div class="container">
+            <div id="header">
+                <div class="logo">
+                    <p>Remind Auto</p>
+                </div>
+                <div class="text-heading">
+                    <a href="/exit">Đăng xuất</a>
+                </div>
+            </div>
+    
+            <div id="main">
+                <div id="sidebar">
+                    <div class="info" id="">
+                        <p class="title" id="username">Xin Chào,
+                          <%= user %></p>
+                          <div class="text-content">
+                            <p>Số dư : </p> <p class="active">{{ data.coin }}</p></p>
+                        </div>
+                    </div>
+    
+                    <div class="charge-money">
+                        <p class="title">Nạp tiền</p>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Logo_MB_new.png" alt="" class="bank">
+                        <div class="text-content">
+                            <p>Số tài khoản : </p> <p class="active">9704229216586789</p>
+                        </div>
+                        
+                        <div class="text-content">
+                            <p>Người nhận : </p> <p class="active">Đỗ Văn Sơn</p>
+                        </div>
+                        <div class="text-content">
+                            <p>Nội dung : </p> <p class="active"><%= user %></p>
+                        </div>
+                        
+    
+                    </div>
+                </div>
+    
+                <div id="content">
+                    <div class="system">
+                        <p class="title">Thống kê</p>
+
+                        <div class="text-content">
+                            <p>Hôm nay đã tương tác </p> <p class="active"> {{ settings.daily }} </p> <p> bài viết</p>
+                        </div>
+                        <div class="text-content">
+                            <p>Đã tương tác tổng cộng </p> <p class="active"> {{ settings.total }} </p> <p> lượt</p>
+                        </div>
+                        <div class="text-content">
+                            <p v-if="settings.autolike == 0">Auto Like đang bật  </p>
+                            <p v-else>Auto Like đang tắt </p>
+                        </div>
+        
+                        <div class="text-content">
+                            <p v-if="settings.email == null">Chưa thêm tài khoản, thêm tài khoản <button class="btn button">Tại đây</button></p>
+                            <p v-else="">Tài khoản đang chạy {{ settings.email }} <button class="button">Sửa</button></p>
+                            <div class="modal">
+                                <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <p class="title">Tài khoản Facebook</p>
+                                <form action="/api/account/add" method="POST">
+                                    <input type="text" name="email" placeholder="Email hoặc số điện thoại" id="email" class="text-box">
+                                    <input type="password" name="password" id="password" placeholder="Mật khẩu" class="text-box">
+                                    <input type="text" name="key2fa" id="key2fa" placeholder="Mã 2fa" class="text-box">
+                                    <input type="text" name="username" id="username" placeholder="username" value="<%= user %>" class="text-box hide">
+                                    <input type="text" name="token" id="token" placeholder="token" value="<%= token %>" class="text-box hide">
+                                    <button type="submit" class="button" style="width: 40px;">Lưu</button>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="notication">
+                        <p class="title">Thông báo</p>
+                        <div class="text-content">
+                            <p>Tham gia nhóm zalo</p> <p class="active"> Tại đây </p> 
+                        </div>
+        
+                        <div class="text-content">
+                            <p>Fanpage hỗ trợ khi gặp lỗi</p> <p class="active"> Tại đây </p> 
+                        </div>
+                        
+                        <div class="text-content">
+                            <p>Hệ thống đã hoạt động bình thường</p>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    <script>
+
+        var app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                data: [],
+                settings:[],
+                errors: []
+                }
+            },
+    
+            created() {
+                    let token = ejs.render('<%= token %>');
+                    let username = ejs.render('<%= user %>');
+                    axios.post('http://localhost:3000/api/getcoin', {
+                    username: username,
+                    token: token,
+                    })
+                    .then(response => {
+                        this.data = response.data.data[0]
+                        })
+                    .catch(function (error) {
+                        console.log(error);
+                    }),
+                    axios.post('http://localhost:3000/api/settings', {
+                    username: username,
+                    token: token,
+                    })
+                    .then(response => {
+                        this.settings = response.data.data[0]
+                        console.log(response.data.data[0])
+                        })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+            
+    })
+    
+    </script>
+    
+    
+</body>
+
+</html>
