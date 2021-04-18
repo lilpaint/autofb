@@ -1,0 +1,153 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+
+}
+
+#header{
+  padding: 10px;
+  width: 50%;
+  margin: 0 auto;
+  padding-bottom: 30px;
+}
+
+
+.logo{
+  width: 30%;
+  display: inline-block;
+}
+
+.logo p{
+  font-size: 30px;
+}
+
+.text-heading {
+  width: 60%;
+  display: inline-block;
+  float: right;
+}
+
+.text-heading p {
+  font-size: 20px;
+}
+
+#main {
+  width: 50%;
+  margin: 0 auto;
+}
+
+#sidebar{
+  width: 30%;
+  display: inline-block;
+  border-right: 2px solid black;
+}
+
+.text-box{
+  margin: 8px 2px;
+  height: 30px;
+  border: 1px solid black;
+  padding: 2px 8px;
+  width: 90%;
+  
+}
+
+.button{
+  margin: 8px 5px;
+  border: none;
+  background-color: black;
+  color: #fff;
+  padding: 8px 8px;
+  width: 40%;
+}
+
+#sidebar .bank {
+  width: 90%;
+}
+
+#content{
+  width: 60%;
+  float: right;
+  display: inline-block;
+}
+
+#main p {
+  display: inline-block;
+}
+
+.text-content {
+  margin: 10px 0px;
+}
+
+#main .active {
+  display: inline-block;
+  padding: 4px 16px;
+  background-color: #000;
+  color: #fff;
+}
+
+#main .title {
+  font-size: 24px;
+  margin: 20px 0px;
+  padding: 2px 0px;
+  border-left: 4px solid #000;
+}
+
+.login,.charge-money, .system, .notication, .signup, .signin, .info {
+  border-bottom: 1px solid #000;
+  width: 95%;
+  padding-bottom: 20px;
+}
+
+.hide {
+  display: none !important;
+}
+
+.text-heading a {
+  text-decoration: none;
+  color: #000;
+  float: right;
+  margin: 3px 15px;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, .4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 20%;
+}
+
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}

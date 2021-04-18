@@ -1,0 +1,35 @@
+<div id="app">
+    {{ posts.data.data[0] }}
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data() {
+            return {
+            posts: {},
+            errors: []
+            }
+        },
+
+        created() {
+                axios.post('http://localhost:3000/api/getcoin', {
+                username: 'thaibinh2',
+                token: 'jY27UiCdZwzC98fOfGz3srEv5qRLuwIyN2r5wg92kKZRbBeksc'
+            })
+            .then(response => {
+                this.posts = response
+                console.log(response)
+                })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+        
+})
+</script>
+
