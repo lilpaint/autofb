@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <div id="header">
+            <div class="logo">
+                <p>Remind Auto</p>
+            </div>
+            <div class="text-heading">
+                
+            </div>
+        </div>
+
+        <div id="main-login" style="width: 40%; margin: 0 auto;">
+                <div class="signin" id="signin" style="width: 80%;">
+                    <p class="title">Đăng Nhập</p>
+                    <form action="/signin" method="POST">
+                        <input type="text" name="username" placeholder="Tài khoản" id="un" class="text-box">
+                        <input type="password" name="password" id="pass" placeholder="Mật khẩu" class="text-box">
+                        <button type="submit" class="button">Đăng nhập</button>
+                    </form>
+                    <button type="submit" class="button" id="view-signup">Đăng kí</button>
+                </div>
+
+                <div class="signup hide" id="signup" style="width: 80%;">
+                  <p class="title">Đăng Kí</p>
+                  <form action="/signup" method="POST">
+                    <input type="text" class="text-box" name="username" id="un" placeholder="Tài khoản">
+                    <input type="password" class="text-box" name="password" id="pass" placeholder="Mật khẩu">
+                    <input type="email" class="text-box" name="email" id="email" placeholder="Email">
+                    <button type="submit" class="button">Đăng kí</button>
+                </form>    
+                <button type="submit" class="button" id="view-signin">Đăng nhập</button>
+                </div>
+                </div>
+
+    <script>
+      const signUpButton = document.getElementById('view-signup');
+      const signInButton = document.getElementById('view-signin');
+      const signin = document.getElementById('signin');
+      const signup = document.getElementById('signup');
+
+      signUpButton.addEventListener('click', () => {
+        signin.classList.add("hide");
+        signup.classList.remove("hide");
+      });
+      
+      signInButton.addEventListener('click', () => {
+        signin.classList.remove("hide");
+        signup.classList.add("hide");
+      });
+      </script>
+
+</body>
+
+</html>

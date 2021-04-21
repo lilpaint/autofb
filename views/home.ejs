@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,6 +34,9 @@
                           <%= user %></p>
                           <div class="text-content">
                             <p>Số dư : </p> <p class="active">{{ data.coin }}</p></p>
+                        </div>
+                        <div class="text-content logout">
+                            <a href="/exit">Đăng xuất</a>
                         </div>
                     </div>
     
@@ -70,8 +74,20 @@
                         </div>
         
                         <div class="text-content">
-                            <p v-if="settings.email == null">Chưa thêm tài khoản, thêm tài khoản <button class="btn button">Tại đây</button></p>
-                            <p v-else="">Tài khoản đang chạy {{ settings.email }} <button class="button">Sửa</button></p>
+                            <p v-if="settings.email == 'isNotActive'">Chưa thêm tài khoản, thêm tài khoản </p>
+                            
+                            
+                            <p v-else="">Tài khoản đang chạy {{ settings.email }}</p>
+                            <div class="text-content" v-if="settings.email == 'isNotActive'"><button class="btn button">Tại đây</button></div>
+                            <div class="text-content" v-else>
+                                <button class="btn button" style="display: inline-block; width: 40px;">Sửa</button>
+                                <form action="/api/account/delete" method="POST" style="display: inline-block;">
+                                <input type="text" name="username" id="username" placeholder="username" value="<%= user %>" class="text-box hide">
+                                <input type="text" name="token" id="token" placeholder="token" value="<%= token %>" class="text-box hide">
+                                <button type="submit" class="button" style="width: 40px; display: inline-block;">Xoá</button>
+                            </form>
+                            </div>
+
                             <div class="modal">
                                 <div class="modal-content">
                                 <span class="close">&times;</span>
@@ -80,10 +96,13 @@
                                     <input type="text" name="email" placeholder="Email hoặc số điện thoại" id="email" class="text-box">
                                     <input type="password" name="password" id="password" placeholder="Mật khẩu" class="text-box">
                                     <input type="text" name="key2fa" id="key2fa" placeholder="Mã 2fa" class="text-box">
+                                    <input type="text" name="delay" id="delay" placeholder="Thời gian nghỉ ( 180 )" class="text-box">
+                                    <input type="text" name="limitdaily" id="limitdaily" placeholder="Số lần tương tác mỗi ngày ( 200 )" class="text-box">
                                     <input type="text" name="username" id="username" placeholder="username" value="<%= user %>" class="text-box hide">
                                     <input type="text" name="token" id="token" placeholder="token" value="<%= token %>" class="text-box hide">
                                     <button type="submit" class="button" style="width: 40px;">Lưu</button>
                                 </form>
+                                
                                 </div>
                             </div>
                         </div>

@@ -18,8 +18,6 @@ html{
   margin: 0 auto;
   padding-bottom: 30px;
 }
-
-
 .logo{
   width: 30%;
   display: inline-block;
@@ -65,7 +63,7 @@ html{
   background-color: black;
   color: #fff;
   padding: 8px 8px;
-  width: 40%;
+  width: 35%;
 }
 
 #sidebar .bank {
@@ -93,7 +91,7 @@ html{
   color: #fff;
 }
 
-#main .title {
+.title {
   font-size: 24px;
   margin: 20px 0px;
   padding: 2px 0px;
@@ -150,4 +148,102 @@ html{
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+.logout {
+  display: none;
+}
+
+@media all and (max-width: 480px) {
+  
+  #header{
+    padding: 10px;
+    width: 85%;
+    margin: 0 auto;
+    padding-bottom: 30px;
+  }
+  .logo{
+    width: 90%;
+    margin: 0 auto;
+  }
+  .text-heading {
+    
+    display: none;
+  }
+  .logout {
+    display: block;
+  }
+
+  .logout a{
+    text-decoration: none;
+  }
+  #main {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  #main .title {
+    font-size: 24px;
+    margin: 20px 0px;
+    padding: 2px 0px;
+    border-left: 4px solid #000;
+    display: block;
+  }
+  #sidebar {
+    width: 90%;
+    margin: 0 auto;
+    border: none;
+    display: block;
+    float: none;
+  }
+
+  #content {
+    width: 90%;
+    margin: 0 auto;
+    display: block;
+    float: none;
+  }
+
+  .button{
+    margin: 8px 5px;
+    border: none;
+    background-color: black;
+    color: #fff;
+    padding: 8px 8px;
+    width: 90%;
+  }
+  .login,.charge-money, .system, .notication, .signup, .signin, .info {
+    border-bottom: 1px solid #000;
+    width: 95%;
+    padding-bottom: 20px;
+    margin: 0 auto;
+  }
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 10%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, .4);
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 8px;
+    border: 1px solid #888;
+    width: 90%;
+  }
+  
+}
+
+/* Dành cho máy tính bảng */
+@media all and (max-width: 1024px) {
+  #main {
+    width: 90%;
+  }
 }

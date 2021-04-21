@@ -20,19 +20,43 @@ router.get('/', function(req, res, next) {
 router.post('/signup', function(req, res, next) {
     let u = req.body.username;
     let p = req.body.password;
-    let em = req.body.email;  
-    const bcrypt = require("bcrypt");        
-    var salt = bcrypt.genSaltSync(10);
-    var pass_mahoa = bcrypt.hashSync(p, salt);
-    var gentoken = makeid(50);
-    let user_info ={username: u, password:pass_mahoa, email:em, token:gentoken}; 
-    let settings ={username: u, token:gentoken};  
-    let sql = 'INSERT INTO users SET ?';
-    let sql2 = 'INSERT INTO settings SET ?';
-    db.query(sql, user_info);
-    db.query(sql2, settings);
-    res.redirect("/success");
-})
+    let em = req.body.email;
+    var sess = req.session;
+    if (!u){
+        sess.daDangNhap = false;
+        sess.mess = 'Tên tài khoản không để trống';
+        res.render("/login"); return;}
+    else if(!p){
+        res.redirect("/login"); return;
+    }
+    else if(!em){
+
+        res.redirect("/login"); return;
+    }
+    
+    let sql3 = 'SELECT * FROM users WHERE username = ?';
+    db.query(sql3, [u] , (err, rows) => {   
+        if (rows.length > 0) { 
+            
+            sess.daDangNhap = false;
+            sess.mess = 'Tài khoản đã có người sử dụng';
+            res.redirect("/login"); return;}
+           
+        else{
+            const bcrypt = require("bcrypt");         
+            var salt = bcrypt.genSaltSync(10);
+            var pass_mahoa = bcrypt.hashSync(p, salt);
+            var gentoken = makeid(50);
+            let user_info ={username: u, password:pass_mahoa, email:em, token:gentoken}; 
+            let settings ={username: u, token:gentoken};  
+            let sql = 'INSERT INTO users SET ?';
+            let sql2 = 'INSERT INTO settings SET ?';
+            db.query(sql, user_info);
+            db.query(sql2, settings);
+            res.redirect("/login");
+        }
+ });   
+});
 
 router.post('/signin', async function(req, res, next) {
  let u = req.body.username;
@@ -45,8 +69,7 @@ router.post('/signin', async function(req, res, next) {
      let email = user.email;        
      const bcrypt = require("bcrypt");        
      var kq = bcrypt.compareSync(p, pass_fromdb);
-     if (kq){ 
-         console.log("OK");       
+     if (kq){       
          var sess = req.session;  //initialize session variable
          sess.daDangNhap = true;
          sess.username = user.username;
@@ -54,7 +77,6 @@ router.post('/signin', async function(req, res, next) {
          sess.token = user.token;
          sess.coin = user.coin;             
          if (sess.back){ 
-             console.log(sess.back);
              res.redirect(sess.back);
          }
          else {
@@ -62,11 +84,14 @@ router.post('/signin', async function(req, res, next) {
          }
      }   
      else {
-         console.log("Not OK");
          res.redirect("/");
      }
  });   
 });
+
+router.get('/login', function(req, res, next) {
+    res.render("login.ejs");
+})
 
 router.get('/success', function(req, res, next) {
     res.render("success.ejs");
