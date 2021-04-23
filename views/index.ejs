@@ -23,8 +23,8 @@
                 <div class="signin" id="signin">
                     <p class="title">Đăng Nhập</p>
                     <form action="/signin" method="POST">
-                        <input type="text" name="username" placeholder="UserName" id="un" class="text-box">
-                        <input type="password" name="password" id="pass" placeholder="Password" class="text-box">
+                        <input type="text" name="username" placeholder="Tên tài khoản" id="un" class="text-box" required>
+                        <input type="password" name="password" id="pass" placeholder="Mật khẩu" class="text-box" required>
                         <button type="submit" class="button">Đăng nhập</button>
                     </form>
                     <button type="submit" class="button" id="view-signup">Đăng kí</button>
@@ -33,9 +33,9 @@
                 <div class="signup hide" id="signup">
                   <p class="title">Đăng Kí</p>
                   <form action="/signup" method="POST">
-                    <input type="text" class="text-box" name="username" id="un">
-                    <input type="password" class="text-box" name="password" id="pass">
-                    <input type="email" class="text-box" name="email" id="email">
+                    <input type="text" class="text-box" name="username" id="un" placeholder="Tên tài khoản" required>
+                    <input type="password" class="text-box" name="password" id="pass" placeholder="Mật khẩu" required>
+                    <input type="text" class="text-box" name="email" id="email" placeholder="Email hoặc số điện thoại" required>
                     <button type="submit" class="button">Đăng kí</button>
                 </form>    
                 <button type="submit" class="button" id="view-signin">Đăng nhập</button>

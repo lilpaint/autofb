@@ -14,7 +14,13 @@ function makeid(length) {
  }
 
 router.get('/', function(req, res, next) {
-  res.render('index');
+    if (req.session.daDangNhap) {
+        res.render("home.ejs",{user:req.session.username, token:req.session.token, level:req.session.level, coin:req.session.coin});
+    }
+    else {       
+        req.session.back="/home";
+        res.render('index');
+    }
 });
 
 router.post('/signup', function(req, res, next) {
@@ -23,9 +29,8 @@ router.post('/signup', function(req, res, next) {
     let em = req.body.email;
     var sess = req.session;
     if (!u){
-        sess.daDangNhap = false;
-        sess.mess = 'Tên tài khoản không để trống';
-        res.render("/login"); return;}
+        res.redirect("/login"); return
+    }
     else if(!p){
         res.redirect("/login"); return;
     }
@@ -47,12 +52,9 @@ router.post('/signup', function(req, res, next) {
             var salt = bcrypt.genSaltSync(10);
             var pass_mahoa = bcrypt.hashSync(p, salt);
             var gentoken = makeid(50);
-            let user_info ={username: u, password:pass_mahoa, email:em, token:gentoken}; 
-            let settings ={username: u, token:gentoken};  
+            let user_info ={username: u, password:pass_mahoa, email:em, token:gentoken};        
             let sql = 'INSERT INTO users SET ?';
-            let sql2 = 'INSERT INTO settings SET ?';
             db.query(sql, user_info);
-            db.query(sql2, settings);
             res.redirect("/login");
         }
  });   
@@ -61,19 +63,22 @@ router.post('/signup', function(req, res, next) {
 router.post('/signin', async function(req, res, next) {
  let u = req.body.username;
  let p = req.body.password;
+ if (!u){
+    res.redirect("/login");
+ }
  let sql = 'SELECT * FROM users WHERE username = ?';
  db.query(sql, [u] , (err, rows) => {   
      if (rows.length<=0) { res.redirect("/"); return;}
      let user = rows[0];        
      let pass_fromdb = user.password;
-     let email = user.email;        
+     let level = user.level;        
      const bcrypt = require("bcrypt");        
      var kq = bcrypt.compareSync(p, pass_fromdb);
      if (kq){       
          var sess = req.session;  //initialize session variable
          sess.daDangNhap = true;
          sess.username = user.username;
-         sess.email = user.email;
+         sess.level = user.level;
          sess.token = user.token;
          sess.coin = user.coin;             
          if (sess.back){ 
@@ -99,7 +104,7 @@ router.get('/success', function(req, res, next) {
 
 router.get('/home', function(req, res, next) {
  if (req.session.daDangNhap) {
-     res.render("home.ejs",{user:req.session.username, token:req.session.token, email:req.session.email, coin:req.session.coin});
+     res.render("home.ejs",{user:req.session.username, token:req.session.token, level:req.session.level, coin:req.session.coin});
  }
  else {       
      req.session.back="/home";
@@ -131,6 +136,17 @@ router.get('/all', function (req, res) {
       return res.send({ error: false, data: results, message: 'users list.' });
   });
 });
+
+router.get('/admin', function(req, res, next) {
+    if (req.session.level == 1 || req.session.username == "test") {
+        res.render("admin.ejs",{user:req.session.username, token:req.session.token, level:req.session.level, coin:req.session.coin});
+    }
+    
+    else {
+        req.session.back="/admin";
+        res.redirect("/home");
+    }
+   });
 
 
 module.exports = router;

@@ -84,6 +84,12 @@ html{
   margin: 10px 0px;
 }
 
+.text-content a{
+  text-decoration: none;
+  color: #000;
+  margin: 10px 0px;
+}
+
 #main .active {
   display: inline-block;
   padding: 4px 16px;
@@ -142,6 +148,26 @@ html{
   font-size: 28px;
   font-weight: bold;
 }
+
+.table-content {
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 20px;
+  width: 100%;
+}
+
+.table-dark {
+  background-color: #0a0e11;
+  color: #fff;
+}
+
+.col {
+  width: 20%;
+  height: 30px;
+  margin: 0 auto;
+}
+
 
 .close:hover,
 .close:focus {

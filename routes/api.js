@@ -1,4 +1,5 @@
 var express = require('express');
+const session = require('express-session');
 var router = express.Router();
 var db=require('../models/database'); 
 /* GET home page. */
@@ -19,7 +20,8 @@ router.post('/settings', function (req, res) {
     let user = req.body.username;
     let token = req.body.token;
     if (!user) {
-        return res.status(400).send({ error:true, message: 'Please provide user' });
+        return res.status(400).send({ error:true, message: 'Please provide user' });1
+
     }
     db.query("SELECT * from settings WHERE username = ? AND token = ?", [user, token], function (error, results, fields) {
         if (error) throw error;
@@ -35,6 +37,42 @@ router.post('/account/setting', function (req,res){
     db.query("SELECT * from settings WHERE email = ?", [email], function (error, results, fields) {
         if (error) throw error;
         return res.send({ error: false, data: results, message: 'New user has been created successfully.' });
+    });
+})
+
+router.post('/account/slot', function (req,res){
+    let d = new Date();
+    let createdate = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+
+    let slot = req.body.slot;
+    let username = req.body.username;
+    let token = req.body.token;
+    if (!slot) {
+        return res.status(400).send({ error:true, message: 'email không được để trống' });
+    }
+    let sql = 'SELECT * FROM users WHERE username = ? AND token = ?';
+    db.query(sql, [username, token] , (err, rows) => {   
+        if (rows.length<=0) { res.redirect("/"); return;}
+        let user = rows[0];        
+        let coin = user.coin;
+        let money = 50000*slot;
+        if(coin < money){
+            res.redirect("/"); return;
+        }
+        else{
+            db.query("UPDATE users SET coin = coin - ?  WHERE username = ? AND token = ?", [money, username, token], function (error, results, fields) {
+                if (error) throw error;
+            });
+            db.query("UPDATE users SET slot = slot + ?  WHERE username = ? AND token = ?", [slot, username, token], function (error, results, fields) {
+                if (error) throw error;
+                res.redirect("/"); return;
+            });
+            for(slotmua = 0; slotmua < slot; slotmua++){
+                let info = [username, token, createdate];        
+                let sql = 'INSERT INTO settings SET username = ?, token = ?, createdate = ?, expiredate = ADDDATE(createdate, 31)';
+                db.query(sql, info);
+            }
+        }
     });
 })
 
@@ -87,6 +125,45 @@ router.get('/limited', function (req, res) {
         return res.send({ error: false, data: results, message: 'users list.' });
     });
   });
+
+  
+router.post('/account/list', function (req, res) {
+    var level = req.body.level;
+    var username = req.body.username;
+    if (!level) {
+        return res.status(400).send({ error:true, message: 'PackageName không được để trống' });
+    }
+    else if(level == 1 || username == 'test'){
+        db.query("SELECT * FROM users", function (error, results, fields) {
+            if (error) throw error;
+            return res.send({ error: false, data: results, message: 'users list.' });
+        });
+    }
+    else if (level == 0) {
+        return res.status(400).send({ error:true, message: 'PackageName không được để trống' });
+    }
+    
+});
+
+router.post('/users/delete/', function (req, res) {
+    let username = req.body.username;
+    if (!username) {
+     return res.status(400).send({ error: true, message: 'Please provide user_id' });
+     
+    }
+    else{
+        db.query("DELETE FROM users WHERE username = ?", [username], function (error, results, fields) {
+            if (error) throw error;
+            
+        });
+        db.query("DELETE FROM settings WHERE username = ?", [username], function (error, results, fields) {
+            if (error) throw error;
+            
+        });
+        
+    }
+});
+
 
 
 module.exports = router;
