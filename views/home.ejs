@@ -92,8 +92,7 @@
                             <p>Đã tương tác tổng cộng </p> <p class="active"> {{ settings.total }} </p> <p> lượt</p>
                         </div>
                         <div class="text-content">
-                            <p v-if="settings.autolike == 0">Auto Like đang bật  </p>
-                            <p v-else>Auto Like đang tắt </p>
+                            <p>Đã mua tổng cộng {{ settings1.length }} slot</p>
                         </div>
         
                         <div class="text-content">
@@ -139,10 +138,10 @@
                             </div>
                             <div class="text-content" v-else>
                                 <form action="/api/account/slot" method="POST">
-                                    <input type="number" name="slot" placeholder="Nhập số gói muốn mua" id="slot" min="1" :max="Math.trunc(data.coin/50000)" class="text-box">
+                                    <input type="number" name="slot" placeholder="Nhập số gói muốn mua" id="slot" required min="1" :max="Math.trunc(data.coin/50000)" class="text-box">
                                     <input type="text" name="username" id="username" placeholder="username" value="<%= user %>" class="text-box hide">
                                     <input type="text" name="token" id="token" placeholder="token" value="<%= token %>" class="text-box hide">
-                                    <button type="submit" class="button" style="width: 40px;">Mua</button>
+                                    <button type="submit" class="button">Mua</button>
                                 </form>
                             </div>
                         </div>
@@ -180,6 +179,7 @@
                 return {
                 data: [],
                 settings:[],
+                settings1:[],
                 errors: []
                 }
             },
@@ -202,7 +202,8 @@
                     token: token,
                     })
                     .then(response => {
-                        this.settings = response.data
+                        this.settings = response.data.data[0]
+                        this.settings1 = response.data.data
                         })
                     .catch(function (error) {
                         console.log(error);
