@@ -58,6 +58,31 @@
                                             
                                             
                                         </form>
+                                        <button class="btn button" style="display: inline-block; width: 40px;" @click="modal(index, item)">Sửa</button>
+                                        <div class="modal" :id="item.username">
+
+                                            <!-- Modal content -->
+                                            <div class="modal-content">
+                                                <span class="close close_multi" @click="modalclose(index, item)">×</span>
+                                                <p class="title">Tài khoản {{ item.username }}</p>
+                                                <form action="/api/users/edit" method="POST">
+                                                    <p>Số tiền</p>
+                                                <input type="number" name="coin" id="coin" value="" class="text-box">
+                                                <br>
+                                                    <p>Level</p>
+                                                    <br>
+                                                <input type="number" name="level" id="level" value="" class="text-box">
+                                                <br>
+                                                    <p>Tên tài khoản</p>
+                                                    <br>
+                                                <input type="text" name="username" id="username" placeholder="username" :value="item.username" class="text-box" readonly="true">
+                                                <button type="submit" class="button" style="width: 40px;">Lưu</button>
+                                            </form>
+                                            </div>
+        
+                                    
+        
+                                        </div>
                                        
                                         </td>
                                     </tr>   
@@ -128,6 +153,26 @@
                         console.log(error);
                     });
                 },
+                update(index, item){
+                    this.data.splice(index, 1)
+                    axios.post('/api/users/edit', {
+                    username: item.username,
+                    })
+                    .then(response => {
+                        console.log(response)
+                        })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                },
+                modal(index, item){
+                        var x = document.getElementById(item.username);
+                        x.style.display = "block";
+                    },
+                    modalclose(index, item){
+                        var x = document.getElementById(item.username);
+                        x.style.display = "none";
+                    },
                 }
                 
         })

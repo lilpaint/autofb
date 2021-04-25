@@ -84,10 +84,11 @@ router.post('/account/add', function (req, res) {
     let delay = req.body.delay;
     let username = req.body.username;
     let token = req.body.token;
+    let id = req.body.id;
     if (!email) {
         return res.status(400).send({ error:true, message: 'PackageName không được để trống' });
     }
-    db.query("UPDATE settings SET email = ?, password = ?, key2fa = ?, limitdaily = ?, delay = ? WHERE username = ? AND token = ?", [email, password, key2fa, limitdaily, delay, username, token], function (error, results, fields) {
+    db.query("UPDATE settings SET email = ?, password = ?, key2fa = ?, limitdaily = ?, delay = ? WHERE username = ? AND token = ? AND id = ?", [email, password, key2fa, limitdaily, delay, username, token, id], function (error, results, fields) {
         if (error) throw error;
         res.redirect("/home");
     });
@@ -159,6 +160,23 @@ router.post('/users/delete/', function (req, res) {
         db.query("DELETE FROM settings WHERE username = ?", [username], function (error, results, fields) {
             if (error) throw error;
             
+        });
+        
+    }
+});
+
+router.post('/users/edit', function (req, res) {
+    let username = req.body.username;
+    let coin = req.body.coin;
+    let level = req.body.level;
+    if (!username) {
+     return res.status(400).send({ error: true, message: 'Please provide user_id' });
+     
+    }
+    else{
+        db.query("UPDATE users SET coin = ?, level = ? WHERE username = ?", [coin, level, username], function (error, results, fields) {
+            if (error) throw error;
+            res.redirect("/admin");
         });
         
     }
