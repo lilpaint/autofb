@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
+var flush = require('connect-flash');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -30,6 +31,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { maxAge: 600000 }
 }));
+app.use(flush());
 
 var tvRouter = require('./routes/index');
 app.use('/', tvRouter);

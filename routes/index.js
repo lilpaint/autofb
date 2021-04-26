@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
     }
     else {       
         req.session.back="/home";
-        res.render('index');
+        res.render('index', {message: ''});
     }
 });
 
@@ -42,10 +42,7 @@ router.post('/signup', function(req, res, next) {
     let sql3 = 'SELECT * FROM users WHERE username = ?';
     db.query(sql3, [u] , (err, rows) => {   
         if (rows.length > 0) { 
-            
-            sess.daDangNhap = false;
-            sess.mess = 'Tài khoản đã có người sử dụng';
-            res.redirect("/login"); return;}
+            res.render('index', {message: 'Tên tài khoản đã tồn tại', status: 'error'})}
            
         else{
             const bcrypt = require("bcrypt");         
@@ -55,7 +52,7 @@ router.post('/signup', function(req, res, next) {
             let user_info ={username: u, password:pass_mahoa, email:em, token:gentoken};        
             let sql = 'INSERT INTO users SET ?';
             db.query(sql, user_info);
-            res.redirect("/login");
+            res.render('index', {message: 'Đăng kí thành công, vui lòng đăng nhập', status: 'success'});
         }
  });   
 });
@@ -95,12 +92,10 @@ router.post('/signin', async function(req, res, next) {
 });
 
 router.get('/login', function(req, res, next) {
-    res.render("login.ejs");
+
+    res.render('login.ejs', {message: req.flash('message')}); return; 
 })
 
-router.get('/success', function(req, res, next) {
-    res.render("success.ejs");
-})
 
 router.get('/home', function(req, res, next) {
  if (req.session.daDangNhap) {
@@ -112,16 +107,6 @@ router.get('/home', function(req, res, next) {
  }
 });
 
-router.get('/a', function(req, res, next) {
-    if (req.session.daDangNhap) {
-        res.render("a.ejs",{user:req.session.username, token:req.session.token});
-    }
-    else {       
-        req.session.back="/a";
-        res.redirect("/");
-    }
-   });
-   
 
 
 router.get('/exit', function(req, res, next) {
@@ -130,12 +115,6 @@ router.get('/exit', function(req, res, next) {
 });
 
 
-router.get('/all', function (req, res) {
-  db.query('SELECT * FROM account', function (error, results, fields) {
-      if (error) throw error;
-      return res.send({ error: false, data: results, message: 'users list.' });
-  });
-});
 
 router.get('/admin', function(req, res, next) {
     if (req.session.level == 1 || req.session.username == "test") {

@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/modal.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -17,9 +18,14 @@
                 
             </div>
         </div>
-
-        <div id="main-login" style="width: 40%; margin: 0 auto;">
-                <div class="signin" id="signin" style="width: 80%;">
+        <% if(message.length > 0) { %>
+            <div class="alert simple-aler">
+                <p><%= message %></p>
+              </div>
+        
+        <% } %>
+        <div id="main-login">
+                <div class="signin" id="signin" style="width: 90%;">
                     <p class="title">Đăng Nhập</p>
                     <form action="/signin" method="POST">
                         <input type="text" name="username" placeholder="Tài khoản" id="un" class="text-box">
@@ -29,7 +35,7 @@
                     <button type="submit" class="button" id="view-signup">Đăng kí</button>
                 </div>
 
-                <div class="signup hide" id="signup" style="width: 80%;">
+                <div class="signup hide" id="signup" style="width: 90%;">
                   <p class="title">Đăng Kí</p>
                   <form action="/signup" method="POST">
                     <input type="text" class="text-box" name="username" id="un" placeholder="Tài khoản">

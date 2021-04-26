@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/ejs@3.1.3/ejs.min.js"></script>
-    
+    <script src="/public/javascripts/modal.js"></script>
     
 </head>
 <body>
@@ -85,12 +85,7 @@
                         <p class="title">Thống kê</p>
 
     
-                        <div class="text-content">
-                            <p>Hôm nay đã tương tác </p> <p class="active"> {{ settings.daily }} </p> <p> bài viết</p>
-                        </div>
-                        <div class="text-content">
-                            <p>Đã tương tác tổng cộng </p> <p class="active"> {{ settings.total }} </p> <p> lượt</p>
-                        </div>
+                        
                         <div class="text-content">
                             <p>Đã mua tổng cộng {{ settings1.length }} slot</p>
                         </div>
@@ -119,6 +114,12 @@
                                         </p>
                                         
                                 </div>
+                                <div class="text-content">
+                                    <p>Hôm nay đã tương tác </p> <p class="active"> {{ item.daily }} </p> <p> bài viết</p>
+                                </div>
+                                <div class="text-content">
+                                    <p>Đã tương tác tổng cộng </p> <p class="active"> {{ item.total }} </p> <p> lượt</p>
+                                </div>
                             </div>
                             <div class="text-content" v-if="item.email == 'isNotActive'"><button class="myBtn_multi button" :data-index="item.id" @click="modal(index, item)">Thêm tài khoản</button>
                                 
@@ -137,9 +138,9 @@
                                         <span class="close close_multi" @click="modalclose(index, item)">×</span>
                                         <p class="title">Tài khoản Facebook</p>
                                     <form action="/api/account/add" method="POST">
-                                        <input type="text" name="email" placeholder="Email hoặc số điện thoại" id="email" class="text-box">
+                                        <input type="text" name="email" placeholder="Email hoặc số điện thoại" id="email" class="text-box" required>
                                         <input type="password" name="password" id="password" placeholder="Mật khẩu" class="text-box">
-                                        <input type="text" name="key2fa" id="key2fa" placeholder="Mã 2fa" class="text-box">
+                                        <input type="text" name="key2fa" id="key2fa" placeholder="Mã 2fa" class="text-box" required>
                                         <input type="text" name="delay" id="delay" placeholder="Thời gian nghỉ ( 180 )" class="text-box">
                                         <input type="text" name="limitdaily" id="limitdaily" placeholder="Số lần tương tác mỗi ngày ( 200 )" class="text-box">
                                         <select name="id" id="id" class="text-box">

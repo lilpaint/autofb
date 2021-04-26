@@ -98,10 +98,11 @@ router.post('/account/delete', function (req, res) {
     let email = 'isNotActive';
     let username = req.body.username;
     let token = req.body.token;
+    let id = req.body.id;
     if (!username) {
         return res.status(400).send({ error:true, message: 'PackageName không được để trống' });
     }
-    db.query("UPDATE settings SET email = ? WHERE username = ? AND token = ?", [email, username, token], function (error, results, fields) {
+    db.query("UPDATE settings SET email = ? WHERE username = ? AND token = ? AND id = ?", [email, username, token, id], function (error, results, fields) {
         if (error) throw error;
         res.redirect("/home");
     });
@@ -121,7 +122,7 @@ router.post('/update', function (req, res) {
 });
 
 router.get('/limited', function (req, res) {
-    db.query('SELECT * FROM settings limit 10', function (error, results, fields) {
+    db.query('SELECT * FROM settings limit 20', function (error, results, fields) {
         if (error) throw error;
         return res.send({ error: false, data: results, message: 'users list.' });
     });
