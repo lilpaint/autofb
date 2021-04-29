@@ -117,10 +117,11 @@ router.post('/account/add', function (req, res) {
     let id = req.body.id;
     let content = req.body.content;
     let listid = req.body.listid;
+    let time = req.body.time
     if (!email) {
         return res.status(400).send({ error:true, message: 'PackageName không được để trống' });
     }
-    db.query("UPDATE settings SET email = ?, password = ?, key2fa = ?, limitdaily = ?, delay = ?, content = ?, listid = ? WHERE username = ? AND token = ? AND id = ?", [email, password, key2fa, limitdaily, delay, content, listid, username, token, id], function (error, results, fields) {
+    db.query("UPDATE settings SET email = ?, password = ?, key2fa = ?, limitdaily = ?, delay = ?, content = ?, listid = ?, time = ? WHERE username = ? AND token = ? AND id = ?", [email, password, key2fa, limitdaily, delay, content, listid, time, username, token, id], function (error, results, fields) {
         if (error) throw error;
         res.redirect("/home");
     });
@@ -251,6 +252,21 @@ router.post('/logs/list', function (req, res) {
     }
 });
 
+router.get('/logs/delete', function (req, res) {
+    db.query("DELETE FROM logs", function (error, results, fields) {
+        if (error) throw error;
+        return res.send({ error: false, data: results, message: 'users list.' });
+    });
+});
+
+router.get('/daily/reset', function (req, res) {
+    db.query("UPDATE settings SET daily = 0", function (error, results, fields) {
+        if (error) throw error;
+        return res.send({ error: false, data: results, message: 'users list.' });
+    });
+});
+
+
 router.get('/logs/:email', function (req, res) {
     let email = req.params.email;
     if (!email) {
@@ -282,6 +298,9 @@ router.post('/logs/daily', function (req, res) {
         
     }
 });
+
+
+
 
 
 

@@ -74,6 +74,11 @@ html{
   cursor: pointer;
 }
 
+.text-list {
+  margin: 20px 0px 6px 0px;
+  padding-left: 2px;
+}
+
 #sidebar .bank {
   width: 90%;
 }
