@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <div id="header">
+                <div class="logo">
+                    <p>Remind Auto</p>
+                </div>
+                <div class="text-heading">
+                    <a href="/exit">Đăng xuất</a>
+                </div>
+            </div>
+    
+            <div id="main">
+                
+    
+                <div id="content" style="width: 100%;">
+                    <div class="system">
+                        <p class="title" id="logstitlte">Lịch sử tương tác ngày </p>
+                        <div class="text-content">
+                            <h3>Tài khoản <%= email %></h3>
+                        </div>
+                        <div class="text-content" v-for="(item, index) in data">
+                            <div v-if="data.length == 0">Chưa có dữ liệu</div>
+                            <div v-else>{{ index }}. {{ item.name }} - {{ item.count }} lần</div>
+                            
+                        </div>
+                            
+                    </div>
+                    <div class="notication">
+                        <p class="title">Thông báo</p>
+                        <div class="text-content">
+                            <p>Tham gia nhóm zalo</p> <p class="active"> Tại đây </p> 
+                        </div>
+        
+                        <div class="text-content">
+                            <p>Fanpage hỗ trợ khi gặp lỗi</p> <p class="active"> Tại đây </p> 
+                        </div>
+                        
+                        <div class="text-content">
+                            <p>Hệ thống đã hoạt động bình thường</p>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <script>
+        let d = new Date();
+        document.getElementById("logstitlte").innerHTML = "Báo cáo tương tác ngày " + d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear()
+        </script>
+
+
+        <script>
+
+            var app = new Vue({
+                el: '#app',
+                data() {
+                    return {
+                    data: [],
+                    errors: []
+                    }
+                },
+        
+                created() {
+                        let email = '<%= email %>';
+                        axios.post('/api/logs/daily', {
+                            email: email,
+                        })
+                        .then(response => {
+                            this.data = response.data.data
+                            console.log(response.data.data)
+                            })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                        
+                },
+                
+        })
+        
+        </script>
+</body>
+
+</html>

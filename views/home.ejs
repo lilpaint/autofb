@@ -129,6 +129,8 @@
                             <div class="text-content" v-else>
                                 <button class="btn button" style="display: inline-block; width: 40px;" @click="modal(index, item)">Sửa</button>
                                 <button type="submit" class="button" style="width: 40px; display: inline-block;" @click="del(index, item)">Xoá</button>
+                                <a v-bind:href="'/api/logs/'+item.email" class="button" style="width: 70px; display: inline-block; color: #fff; font-size: 13px;">Lịch sử</a>
+                                
                             </div>
 
                                 <div class="modal" :id="item.username + item.id">
@@ -137,12 +139,20 @@
                                     <div class="modal-content">
                                         <span class="close close_multi" @click="modalclose(index, item)">×</span>
                                         <p class="title">Tài khoản Facebook</p>
-                                    <form action="/api/account/add" method="POST">
+                                        <form action="/api/account/add" method="POST">
                                         <input type="text" name="email" placeholder="Email hoặc số điện thoại" id="email" class="text-box" required>
-                                        <input type="password" name="password" id="password" placeholder="Mật khẩu" class="text-box">
+                                        <input type="password" name="password" id="password" placeholder="Mật khẩu" class="text-box" required>
                                         <input type="text" name="key2fa" id="key2fa" placeholder="Mã 2fa" class="text-box" required>
-                                        <input type="text" name="delay" id="delay" placeholder="Thời gian nghỉ ( 180 )" class="text-box">
-                                        <input type="text" name="limitdaily" id="limitdaily" placeholder="Số lần tương tác mỗi ngày ( 200 )" class="text-box">
+                                        <input type="text" name="delay" id="delay" placeholder="Thời gian nghỉ ( 60 )" :value="item.delay" class="text-box" required>
+                                        <input type="text" name="limitdaily" id="limitdaily" :value="item.limitdaily" placeholder="Số lần tương tác mỗi ngày ( 500 )" class="text-box" required>
+                                        <textarea v-if="item.vip == 1" name="listid" rows="10" cols="63" :value="item.listid" class="textarea" placeholder="Nhập danh sách ID muốn tương tác, mỗi ID cách nhau bởi dấu |. Ví dụ : 12345 | 54321 | 99999..." required>
+                                        </textarea>
+                                        <textarea v-if="item.vip == 0" name="listid" rows="10" cols="63" value="null" class="textarea hide">
+                                        </textarea>
+                                        <textarea v-if="item.comment == 1" name="content" rows="10" cols="63" :value="item.content" class="textarea" placeholder="Nhập nội dung cmt, mỗi cmt cách nhau bởi dấu |. Ví dụ : Tương tác tốt | Sản phẩm tốt |Tương tác nhé..." required>
+                                        </textarea>
+                                        <textarea v-if="item.comment == 0" name="content" rows="10" cols="63" value="none" class="textarea hide">
+                                        </textarea>
                                         <select name="id" id="id" class="text-box">
                                             
                                             <option :value="item.id">
@@ -158,8 +168,7 @@
                             
 
                                 </div>
-
-                            
+                               
                         </div>
                         <div class="text-content">
                             <p class="title">Mua thêm slot</p>
@@ -174,6 +183,17 @@
                                     <input type="number" name="slot" placeholder="Nhập số gói muốn mua" id="slot" required min="1" :max="Math.trunc(data.coin/50000)" class="text-box">
                                     <input type="text" name="username" id="username" placeholder="username" value="<%= user %>" class="text-box hide">
                                     <input type="text" name="token" id="token" placeholder="token" value="<%= token %>" class="text-box hide">
+                                    <br>
+                                    <div class="text-content">
+                                        <select name="vip" id="vip" class="text-box">
+                                            <option value="0">Thường ( 50.000đ )</option>
+                                            <option value="1">Tương tác ID ( 40.000đ )</option>
+                                          </select>
+                                    </div>
+                                    <div class="text-content">
+                                        <input type="checkbox" id="comment" name="comment" value="1">
+                                        <label for="vehicle1"> Mua kèm gói CMT ( 20.000đ )</label><br>
+                                    </div>
                                     <button type="submit" class="button">Mua</button>
                                 </form>
                             </div>
@@ -213,6 +233,7 @@
                 data: [],
                 settings:[],
                 settings1:[],
+                logs:[],
                 errors: []
                 }
             },
@@ -251,6 +272,17 @@
                     })
                     .then(response => {
                         window.location="/";
+                        })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                    },
+                    loadlogs(index, item){
+                    axios.post('/api/logs/daily', {
+                        email: item.email,
+                    })
+                    .then(response => {
+                        this.logs = response.data.data
                         })
                     .catch(function (error) {
                         console.log(error);

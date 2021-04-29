@@ -56,14 +56,22 @@ html{
   width: 90%;
   
 }
-
+.textarea{
+  margin: 8px 2px;
+  height: 120px;
+  border: 1px solid black;
+  padding: 2px 8px;
+  width: 90%;
+  
+}
 .button{
-  margin: 8px 5px;
+  margin: 8px 0;
   border: none;
   background-color: black;
   color: #fff;
   padding: 8px 8px;
   width: 35%;
+  cursor: pointer;
 }
 
 #sidebar .bank {
@@ -297,7 +305,7 @@ html{
   }
 
   .button{
-    margin: 8px 5px;
+    margin: 8px 0;
     border: none;
     background-color: black;
     color: #fff;

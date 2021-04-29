@@ -82,11 +82,11 @@ router.post('/signin', async function(req, res, next) {
              res.redirect(sess.back);
          }
          else {
-             res.redirect("/home");
+            res.render('home', {message: 'Đăng nhập thành công', status: 'success'});
          }
      }   
      else {
-         res.redirect("/");
+         res.render('index', {message: 'Đăng nhập thất bại', status: 'error'});
      }
  });   
 });
@@ -99,7 +99,7 @@ router.get('/login', function(req, res, next) {
 
 router.get('/home', function(req, res, next) {
  if (req.session.daDangNhap) {
-     res.render("home.ejs",{user:req.session.username, token:req.session.token, level:req.session.level, coin:req.session.coin});
+     res.render("home.ejs",{user:req.session.username, token:req.session.token, level:req.session.level, coin:req.session.coin, message: 'Đăng nhập thành công', status: 'success'});
  }
  else {       
      req.session.back="/home";

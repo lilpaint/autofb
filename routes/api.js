@@ -47,11 +47,14 @@ router.post('/account/slot', function (req,res){
     let slot = req.body.slot;
     let username = req.body.username;
     let token = req.body.token;
+    let comment = req.body.comment;
+    let vip = req.body.vip;
     if (!slot) {
         return res.status(400).send({ error:true, message: 'email không được để trống' });
     }
-    let sql = 'SELECT * FROM users WHERE username = ? AND token = ?';
-    db.query(sql, [username, token] , (err, rows) => {   
+    if (!comment){
+        let sql = 'SELECT * FROM users WHERE username = ? AND token = ?';
+        db.query(sql, [username, token] , (err, rows) => {   
         if (rows.length<=0) { res.redirect("/"); return;}
         let user = rows[0];        
         let coin = user.coin;
@@ -68,12 +71,39 @@ router.post('/account/slot', function (req,res){
                 res.redirect("/"); return;
             });
             for(slotmua = 0; slotmua < slot; slotmua++){
-                let info = [username, token, createdate];        
-                let sql = 'INSERT INTO settings SET username = ?, token = ?, createdate = ?, expiredate = ADDDATE(createdate, 31)';
+                let info = [username, token, createdate, vip];        
+                let sql = 'INSERT INTO settings SET username = ?, token = ?, createdate = ?, expiredate = ADDDATE(createdate, 31), vip = ?';
                 db.query(sql, info);
             }
         }
     });
+    }
+    else{
+        let sql = 'SELECT * FROM users WHERE username = ? AND token = ?';
+        db.query(sql, [username, token] , (err, rows) => {   
+        if (rows.length<=0) { res.redirect("/"); return;}
+        let user = rows[0];        
+        let coin = user.coin;
+        let money = 70000*slot;
+        if(coin < money){
+            res.redirect("/"); return;
+        }
+        else{
+            db.query("UPDATE users SET coin = coin - ?  WHERE username = ? AND token = ?", [money, username, token], function (error, results, fields) {
+                if (error) throw error;
+            });
+            db.query("UPDATE users SET slot = slot + ?  WHERE username = ? AND token = ?", [slot, username, token], function (error, results, fields) {
+                if (error) throw error;
+                res.redirect("/"); return;
+            });
+            for(slotmua = 0; slotmua < slot; slotmua++){
+                let info = [username, token, createdate, vip];        
+                let sql = 'INSERT INTO settings SET username = ?, token = ?, createdate = ?, expiredate = ADDDATE(createdate, 31), comment = 1, vip = ?';
+                db.query(sql, info);
+            }
+        }
+    });
+    }
 })
 
 router.post('/account/add', function (req, res) {
@@ -85,10 +115,12 @@ router.post('/account/add', function (req, res) {
     let username = req.body.username;
     let token = req.body.token;
     let id = req.body.id;
+    let content = req.body.content;
+    let listid = req.body.listid;
     if (!email) {
         return res.status(400).send({ error:true, message: 'PackageName không được để trống' });
     }
-    db.query("UPDATE settings SET email = ?, password = ?, key2fa = ?, limitdaily = ?, delay = ? WHERE username = ? AND token = ? AND id = ?", [email, password, key2fa, limitdaily, delay, username, token, id], function (error, results, fields) {
+    db.query("UPDATE settings SET email = ?, password = ?, key2fa = ?, limitdaily = ?, delay = ?, content = ?, listid = ? WHERE username = ? AND token = ? AND id = ?", [email, password, key2fa, limitdaily, delay, content, listid, username, token, id], function (error, results, fields) {
         if (error) throw error;
         res.redirect("/home");
     });
@@ -122,7 +154,7 @@ router.post('/update', function (req, res) {
 });
 
 router.get('/limited', function (req, res) {
-    db.query('SELECT * FROM settings limit 20', function (error, results, fields) {
+    db.query("SELECT * FROM settings WHERE email != 'isNotActive' limit 20", function (error, results, fields) {
         if (error) throw error;
         return res.send({ error: false, data: results, message: 'users list.' });
     });
@@ -178,6 +210,74 @@ router.post('/users/edit', function (req, res) {
         db.query("UPDATE users SET coin = ?, level = ? WHERE username = ?", [coin, level, username], function (error, results, fields) {
             if (error) throw error;
             res.redirect("/admin");
+        });
+        
+    }
+});
+
+router.post('/logs/add', function (req, res) {
+    let idlike = req.body.idlike;
+    let email = req.body.email;
+    let count = req.body.count;
+    let name = req.body.name;
+    if (!idlike) {
+     return res.status(400).send({ error: true, message: 'Please provide user_id' });
+     
+    }
+    else{
+        
+        db.query("INSERT INTO logs SET email = ?, idlike = ?, count = ?, name = ?", [email, idlike, count, name], function (error, results, fields) {
+            if (error) throw error;
+            return res.send({ error: false, data: results, message: 'users list.' });
+        });
+        
+    }
+});
+
+router.post('/logs/list', function (req, res) {
+    let idlike = req.body.idlike;
+    let email = req.body.email;
+    if (!idlike) {
+     return res.status(400).send({ error: true, message: 'Please provide user_id' });
+     
+    }
+    else{
+        
+        db.query("SELECT * FROM logs WHERE idlike = ? AND email = ?", [idlike, email], function (error, results, fields) {
+            if (error) throw error;
+            return res.send({ error: false, data: results, message: 'users list.' });
+        });
+        
+    }
+});
+
+router.get('/logs/:email', function (req, res) {
+    let email = req.params.email;
+    if (!email) {
+     return res.status(400).send({ error: true, message: 'Please provide user_id' });
+     
+    }
+    else{
+        
+        db.query("SELECT * FROM logs WHERE email = ?", [email], function (error, results, fields) {
+            if (error) throw error;
+            return res.render('logs',{ error: false, data: results, message: 'users list.', email: email });
+        });
+        
+    }
+});
+
+router.post('/logs/daily', function (req, res) {
+    let email = req.body.email;
+    if (!email) {
+     return res.status(400).send({ error: true, message: 'Please provide user_id' });
+     
+    }
+    else{
+        
+        db.query("SELECT * FROM logs WHERE email = ?", [email], function (error, results, fields) {
+            if (error) throw error;
+            return res.send({ error: false, data: results, message: 'users list.' });
         });
         
     }
