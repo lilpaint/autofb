@@ -77,6 +77,17 @@
                                 <input type="number" name="slot" placeholder="Nhập số gói muốn mua" id="slot" min="1" :max="Math.trunc(data.coin/50000)" class="text-box">
                                 <input type="text" name="username" id="username" placeholder="username" value="<%= user %>" class="text-box hide">
                                 <input type="text" name="token" id="token" placeholder="token" value="<%= token %>" class="text-box hide">
+                                <br>
+                                    <div class="text-content">
+                                        <select name="vip" id="vip" class="text-box">
+                                            <option value="0">Thường ( 50.000đ )</option>
+                                            <option value="1">Tương tác ID ( 40.000đ )</option>
+                                          </select>
+                                    </div>
+                                    <div class="text-content">
+                                        <input type="checkbox" id="comment" name="comment" value="1">
+                                        <label for="vehicle1"> Mua kèm gói CMT ( 20.000đ )</label><br>
+                                    </div>
                                 <button type="submit" class="button" style="width: 40px;">Mua</button>
                             </form>
                         </div>
@@ -150,14 +161,15 @@
                                         <input type="text" name="delay" id="delay" placeholder="Thời gian nghỉ ( 60 )" :value="item.delay" class="text-box" required>
                                         <div class="text-list">Số lần tương tác mỗi ngày ( 500 )</div>
                                         <input type="text" name="limitdaily" id="limitdaily" :value="item.limitdaily" placeholder="Số lần tương tác mỗi ngày ( 500 )" class="text-box" required>
-                                        <div class="text-list">Danh sách ID muốn tương tác, cách nhau bởi dấu |</div>
+                                        <div class="text-list" v-if="item.vip == 1">Danh sách ID muốn tương tác, cách nhau bởi dấu |</div>
                                         <textarea v-if="item.vip == 1" name="listid" rows="10" cols="63" :value="item.listid" class="textarea" placeholder="Nhập danh sách ID muốn tương tác, mỗi ID cách nhau bởi dấu |. Ví dụ : 12345 | 54321 | 99999..." required>
                                         </textarea>
                                         <textarea v-if="item.vip == 0" name="listid" rows="10" cols="63" value="null" class="textarea hide">
                                         </textarea>
-                                        <div class="text-list">Số bài viết muốn tương tác với mỗi ID</div>
+                                        <div class="text-list" v-if="item.vip == 1">Số bài viết muốn tương tác với mỗi ID</div>
                                         <input v-if="item.vip == 1" type="text" name="time" id="time" :value="item.time" placeholder="Số bài viết muốn tương tác" class="text-box" required>
-                                        <div class="text-list">Nhập nội dung cmt, mỗi cmt cách nhau bởi dấu |</div>
+                                        <input v-if="item.vip == 0" type="text" name="time" id="time" value="0" placeholder="Số bài viết muốn tương tác" class="text-box hide" required>
+                                        <div class="text-list" v-if="item.comment == 1">Nhập nội dung cmt, mỗi cmt cách nhau bởi dấu |</div>
                                         <textarea v-if="item.comment == 1" name="content" rows="10" cols="63" :value="item.content" class="textarea" placeholder="Nhập nội dung cmt, mỗi cmt cách nhau bởi dấu |. Ví dụ : Tương tác tốt | Sản phẩm tốt |Tương tác nhé..." required>
                                         </textarea>
                                         <textarea v-if="item.comment == 0" name="content" rows="10" cols="63" value="none" class="textarea hide">

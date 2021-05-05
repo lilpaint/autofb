@@ -60,7 +60,7 @@ router.post('/account/slot', function (req,res){
         let coin = user.coin;
         let money = 50000*slot;
         if(coin < money){
-            res.redirect("/"); return;
+            res.render("home", {message: 'Không đủ tiền', status: 'error'}); return;
         }
         else{
             db.query("UPDATE users SET coin = coin - ?  WHERE username = ? AND token = ?", [money, username, token], function (error, results, fields) {
@@ -68,7 +68,7 @@ router.post('/account/slot', function (req,res){
             });
             db.query("UPDATE users SET slot = slot + ?  WHERE username = ? AND token = ?", [slot, username, token], function (error, results, fields) {
                 if (error) throw error;
-                res.redirect("/"); return;
+                res.render("home", {message: 'Thành công', status: 'error', user:username, token:token}); return;
             });
             for(slotmua = 0; slotmua < slot; slotmua++){
                 let info = [username, token, createdate, vip];        
