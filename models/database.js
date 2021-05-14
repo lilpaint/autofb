@@ -3,7 +3,7 @@ var db = mysql.createConnection({
     host: 'localhost',     
     user: 'root',     
     password: 'Fakepw1-',     
-    database: 'remind' 
+    database: 'viplike' 
 });  
 db.connect(function(err) {    
    if (err) throw err;    
